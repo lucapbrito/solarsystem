@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+</head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System</title>
+</head>
+<body>
+    <script>
+        function setup() {
+            createCanvas(600, 600);
+        }
+
+        function draw() {
+            background(0);
+
+            //sun
+            fill("rgb(255,255,0)");
+            circle(width/2, height/2, 25);
+            
+            //orbit
+            stroke("grey");
+            strokeWeight(1);
+            noFill();
+            circle(width/2, height/2, 70);
+            
+            //Mercury
+            noStroke();
+            fill("rgb(252,37,37)")
+            circle(335, 300, 10);
+        }
+    </script>
+</body>
+</html>
