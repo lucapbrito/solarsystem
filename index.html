@@ -11,27 +11,105 @@
 </head>
 <body>
     <script>
+        //constants
+        const planets = [
+        {
+            name: "Mercury",
+            colour: "rgb(252,37,37)",
+            planetSize: 10,
+            orbitSize: 70,
+            yearDuration: 88,
+        },
+        {
+            name: "Venus",
+            colour: "#FFC107",
+            planetSize: 10,
+            orbitSize: 100,
+            yearDuration: 225,
+        },
+        {
+            name: "Earth",
+            colour: "#2196F3",
+            planetSize: 10,
+            orbitSize: 130,
+            yearDuration: 365,
+        },
+        {
+            name: "Mars",
+            colour: "#E97A08",
+            planetSize: 10,
+            orbitSize: 160,
+            yearDuration: 687,
+        },
+        {
+            name: "Jupiter",
+            colour: "#B48A5E",
+            planetSize: 20,
+            orbitSize: 210,
+            yearDuration: 4333,
+        },
+        {
+            name: "Saturn",
+            colour: "#E7B27A",
+            planetSize: 15,
+            orbitSize: 250,
+            yearDuration: 10759,
+        },
+        {
+            name: "Uranus",
+            colour: "#30ECEC",
+            planetSize: 12,
+            orbitSize: 300,
+            yearDuration: 30687,
+        },
+        {
+            name: "Neptune",
+            colour: "#021ADA",
+            planetSize: 12,
+            orbitSize: 350,
+            yearDuration: 60190,
+        }
+        ];
+
         function setup() {
-            createCanvas(600, 600);
+        createCanvas(600, 600);
+        frameRate(30);
+        angleMode(DEGREES);
         }
 
         function draw() {
-            background(0);
+        background(0);
 
-            //sun
-            fill("rgb(255,255,0)");
-            circle(width/2, height/2, 25);
-            
-            //orbit
-            stroke("grey");
-            strokeWeight(1);
-            noFill();
-            circle(width/2, height/2, 70);
-            
-            //Mercury
-            noStroke();
-            fill("rgb(252,37,37)")
-            circle(335, 300, 10);
+        //sun
+        fill("rgb(255,255,0)");
+        circle(width/2, height/2, 25);
+
+        //planets
+        planets.forEach((planet) => {
+            drawPlanet(
+            planet.orbitSize,
+            planet.planetSize,
+            planet.colour,
+            planet.yearDuration
+            );
+        })
+        }
+
+        function drawPlanet(orbitSize, planetSize, colour, yearDuration){
+        //orbit
+        stroke("grey");
+        strokeWeight(1);
+        noFill();
+        circle(width/2, height/2, orbitSize);
+
+        //planet
+        let velocity = 1/(yearDuration/365);
+        let angle = (frameCount*velocity)%360;
+        noStroke();
+        fill(colour);
+        let x = width/2 + cos(angle)*orbitSize/2;
+        let y = height/2 - sin(angle)*orbitSize/2;
+        circle(x, y, planetSize);
         }
     </script>
 </body>
