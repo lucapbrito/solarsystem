@@ -11,6 +11,12 @@
 </head>
 <body>
     <script>
+        //variables
+        let clicked = false;
+        let clickedX = 0;
+        let clickedY = 0;
+        let clickedPlanetName = "";
+
         //constants
         const planets = [
         {
@@ -19,6 +25,13 @@
             planetSize: 10,
             orbitSize: 70,
             yearDuration: 88,
+            moons: 0,
+            dayDuration: "176 Earth days",
+            normalTemperatureDay: "800 F (430 C)",
+            normaltemperatureNight: "-290 F (-180 C)",
+            perimeter: "9,525 miles (15,329 km)",
+            mass: "(10^24kg) 0.33010kg",
+            distanceToSun: 0.4
         },
         {
             name: "Venus",
@@ -26,6 +39,12 @@
             planetSize: 10,
             orbitSize: 100,
             yearDuration: 225,
+            moons: 0,
+            dayDuration: "243 Earth days",
+            normalTemperature: "860 F (460 C)",
+            perimeter: "23,628 miles (38,025 km)",
+            mass: "(10^24kg) 0.815kg",
+            distanceToSun: 0.7
         },
         {
             name: "Earth",
@@ -33,6 +52,13 @@
             planetSize: 10,
             orbitSize: 130,
             yearDuration: 365,
+            moons: 1,
+            dayDuration: "24h",
+            normalTemperatureDay: "59 F (15 C)",
+            normalTemperatureNight: "57.2 F (14 C)",
+            perimeter: "24,901 miles (40074.275 km)",
+            mass:"(10^24kg) 5.9722e + 24",
+            distanceToSun: 1.0
         },
         {
             name: "Mars",
@@ -40,6 +66,13 @@
             planetSize: 10,
             orbitSize: 160,
             yearDuration: 687,
+            moons: 2,
+            dayDuration: "24h 37min",
+            normalTemperatureDay: "70 F (21.1111 C)",
+            normalTemperatureNight: "-274 F (-133 C)",
+            perimeter: "13048.795 miles (21,000 km)",
+            mass: "(10^23kg) 6.39e + 23",
+            distanceToSun: 1.5
         },
         {
             name: "Jupiter",
@@ -47,6 +80,12 @@
             planetSize: 20,
             orbitSize: 210,
             yearDuration: 4333,
+            moons: 95,
+            dayDuration: "9h 56min",
+            normalTemperature: "-234 F (-145 C)",
+            perimeter: "272,946 miles (378,675 km)",
+            mass: "(10^27kg) 1.898e + 27",
+            distanceToSun: 5.2
         },
         {
             name: "Saturn",
@@ -54,6 +93,12 @@
             planetSize: 15,
             orbitSize: 250,
             yearDuration: 10759,
+            moons: 146,
+            dayDuration: "10h 34min",
+            normalTemperature: "-220 F (-140 C)",
+            perimeter: "235,298 miles (378,675 km)",
+            mass: "(10^24kg) 568.32kg",
+            distanceToSun: 9.6
         },
         {
             name: "Uranus",
@@ -61,6 +106,12 @@
             planetSize: 12,
             orbitSize: 300,
             yearDuration: 30687,
+            moons: 28,
+            dayDuration: "17h 14min",
+            normalTemperature: "-320 F (-195 C)",
+            perimeter: "99785.9998 miles (160,590 km)",
+            mass: "(10^24kg) 86.881kg",
+            distanceToSun: 19.2
         },
         {
             name: "Neptune",
@@ -68,11 +119,17 @@
             planetSize: 12,
             orbitSize: 350,
             yearDuration: 60190,
+            moons: 16,
+            dayDuration: "16h 6min",
+            normalTemperature: "-330 F (-200 C)",
+            perimeter: "96685.3575 miles (155,600 km)",
+            mass: "(10^24kg) 102.409kg",
+            distanceToSun: 30
         }
         ];
 
         function setup() {
-        createCanvas(600, 600);
+        createCanvas(1200, 600);
         frameRate(30);
         angleMode(DEGREES);
         }
@@ -87,15 +144,39 @@
         //planets
         planets.forEach((planet) => {
             drawPlanet(
+            planet.name,
             planet.orbitSize,
             planet.planetSize,
             planet.colour,
             planet.yearDuration
             );
-        })
+        });
+        
+        //details
+        if(clicked) {
+            const clickedPlanet = planets.filter(
+            p => p.name == clickedPlanetName
+            )[0]
+            fill("white");
+            stroke("black");
+            rect(5, 10, 255, 210, 5);
+            fill("black");
+            text("planet: " + clickedPlanet?.name, 10, 30);
+            text("moons: " + clickedPlanet?.moons, 10, 50);
+            text("day duration: " + clickedPlanet?.dayDuration, 10, 70);
+            text("normal temperature: " + clickedPlanet?.normalTemperature, 10, 90);
+            text("perimeter: " + clickedPlanet?.perimeter, 10, 150);
+            text("year duration: " +               clickedPlanet?.yearDuration,10, 170);
+            text("mass: " + clickedPlanet?.mass, 10, 190);
+            text("normal temperature of day: " + clickedPlanet?.normalTemperatureDay, 10, 110);
+            text("normal temperature of night: " + clickedPlanet?.normalTemperatureNight, 10, 130);
+            text("distance to sun: " + clickedPlanet?.distanceToSun + " AU", 10, 210);
+
+        }
+        
         }
 
-        function drawPlanet(orbitSize, planetSize, colour, yearDuration){
+        function drawPlanet(planetName, orbitSize, planetSize, colour, yearDuration){
         //orbit
         stroke("grey");
         strokeWeight(1);
@@ -110,6 +191,22 @@
         let x = width/2 + cos(angle)*orbitSize/2;
         let y = height/2 - sin(angle)*orbitSize/2;
         circle(x, y, planetSize);
+
+        if(
+            clickedX > (x-planetSize/2) && 
+            clickedX < (x+planetSize/2) &&
+            clickedY > (y-planetSize/2) &&
+            clickedY < (y+planetSize/2)
+        ){
+            clickedPlanetName = planetName;
+        }
+        
+        }
+
+        function mouseClicked(){
+        clicked = !clicked;
+        clickedX = mouseX;
+        clickedY = mouseY;
         }
     </script>
 </body>
