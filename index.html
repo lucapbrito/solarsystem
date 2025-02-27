@@ -140,7 +140,14 @@
         //sun
         fill("rgb(255,255,0)");
         circle(width/2, height/2, 25);
-
+        
+        //buttons
+        fill("white");
+        triangle(800, 15, 805, 10, 805, 20);
+        triangle(805, 15, 810, 10, 810, 20);
+        triangle(840, 15, 835, 10, 835, 20);
+        triangle(845, 15, 840, 10, 840, 20);
+        
         //planets
         planets.forEach((planet) => {
             drawPlanet(
@@ -207,7 +214,7 @@
         clicked = !clicked;
         clickedX = mouseX;
         clickedY = mouseY;
-        }
+        } 
     </script>
 </body>
 </html>
