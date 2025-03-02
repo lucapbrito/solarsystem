@@ -12,11 +12,11 @@
 <body>
     <script>
 //variables
-let clicked = false;
-let clickedX = 0;
-let clickedY = 0;
-let clickedPlanetName = "";
-let elapsedFrames = 0;
+let clicked = false; //planet is selected to show info
+let clickedX = 0; //x-coordinate when clicked
+let clickedY = 0; //y-coordinate when clicked
+let clickedPlanetName = ""; //selected planet to show info
+let elapsedFrames = 0; //frame count considering selected speed
 let speedOptions = [
   -10000000,
   -5000000,
@@ -36,32 +36,31 @@ let speedOptions = [
   1000000,
   5000000,
   10000000,
-];
-let speedIndex = 9;
+]; //speed rate options for user
+let speedIndex = 9; //initial selected speed rate
 
 //constants
-const timeStampStarted = new Date();
-const maxSpeed = 10000000;
+const timeStampStarted = new Date(); //app start time
 const secondsInDay =
       60 * // seconds in one minute
       60 * // minutes in one hour
       24; // hours in one day
-const appFrameRate = 30;
+const appFrameRate = 30; //number of renders per seconds
 const planets = [
   {
-    name: "Mercury",
-    colour: "rgb(252,37,37)",
-    planetSize: 10,
-    transform: 8,
-    yearDuration: 88,
-    moons: 0,
-    dayDuration: "176 Earth days",
-    normalTemperatureDay: "800 F (430 C)",
-    normaltemperatureNight: "-290 F (-180 C)",
-    perimeter: "9,525 miles (15,329 km)",
-    mass: "(10^24kg) 0.33010kg",
-    distanceToSun: 0.4,
-    initialAngle: 60,
+    name: "Mercury", //name of planet
+    colour: "rgb(252,37,37)", //color of planet
+    planetSize: 10, //diameter of planet in pixels
+    transform: 8, //distance scale to better represent planets visually
+    yearDuration: 88, //year duration of planet
+    moons: 0, //how many moons does it have
+    dayDuration: "176 Earth days", //day duration of planet
+    normalTemperatureDay: "800 F (430 C)", //normal temperature of day in planet
+    normaltemperatureNight: "-290 F (-180 C)", //normal temperature of planet at night
+    perimeter: "9,525 miles (15,329 km)", //perimeter of planet
+    mass: "(10^24kg) 0.33010kg", //mass of planet
+    distanceToSun: 0.4, //distance to sun in AU
+    initialAngle: 60, //where planets start of in as of March 2nd
   },
   {
     name: "Venus",
@@ -165,45 +164,63 @@ const planets = [
   }
 ];
 
+//Initial setup for the p5.js library
 function setup() {
+  //Create a canvas with 1200px wide and 600 high
   createCanvas(1200, 600);
+  //How often the call function is called per second
   frameRate(appFrameRate);
+  //Interpreting angles as degrees
   angleMode(DEGREES);
 }
-
-function draw() {
-  background(0);
+//function called for every animation frame (30 fps)
+function draw(){
+  //color of backgroung
+  background("gray");
 
   //accumulate frames according to set speed
   elapsedFrames += speedOptions[speedIndex];
   
   //calculate today's represented day
+  //color of buttons/text
   fill("white");
+  //creating variable that is date type
   let now = new Date();
+  //setting time to represented time
   now.setSeconds(
+    //getting seconds from when app started
     timeStampStarted.getSeconds() +
+    //showing how many seconds have passed since app opened
     (elapsedFrames / appFrameRate)
   );
+  //show date on top of the app
   text(
+    //representing date in browser
     now.toLocaleString(),
+    //coordinates of date
     600, 20);
   
-  //sun
+  //sun colour
   fill("rgb(255,255,0)");
+  //draw sun at the centre of the screen
   circle(width/2, height/2, 25);
   
   //buttons
   fill("white");
+  //making button to slow down as triangles
   triangle(805, 20, 815, 10, 815, 30);
   triangle(815, 20, 825, 10, 825, 30);
   
+  //coordinates of text for current speed
   text(speedOptions[speedIndex] + 'x', 828, 20);
   
+  //making button to speed up as triangles
   triangle(905, 20, 895, 10, 895, 30);
   triangle(915, 20, 905, 10, 905, 30);
   
   //planets
   planets.forEach((planet) => {
+    //calling function to draw the planet
     drawPlanet(
       planet.name,
       planet.distanceToSun,
@@ -215,43 +232,77 @@ function draw() {
     );
   });
   
-  //details
+  //show planet details when planet is selected
   if(clicked) {
+    //recover planet object from planets array
     const clickedPlanet = planets.filter(
+      //compare whether planet name matches the clicked one
       p => p.name == clickedPlanetName
-    )[0]
+    )[0]//get the first element of the result array
+    //showing stats
+    //stat box background colour
     fill("white");
+    //text color black
     stroke("black");
+    //stat box for planet details
     rect(5, 10, 255, 210, 5);
+    //closing button
     fill("black");
+    triangle(240, 25, 250, 20, 250, 30);
+    //font colour in stat box
+    //showing name of planet
     text("planet: " + clickedPlanet?.name, 10, 30);
+    //showing amount of moons
     text("moons: " + clickedPlanet?.moons, 10, 50);
+    //showing day duration
     text("day duration: " + clickedPlanet?.dayDuration, 10, 70);
+    //showing normal temperature
     text("normal temperature: " + clickedPlanet?.normalTemperature, 10, 90);
+    //showing perimeter
     text("perimeter: " + clickedPlanet?.perimeter, 10, 150);
+    //showing year duration
     text("year duration: " +               clickedPlanet?.yearDuration,10, 170);
+    //showing mass
     text("mass: " + clickedPlanet?.mass, 10, 190);
+    //showing normal temperature of day if night to day changes for planet
     text("normal temperature of day: " + clickedPlanet?.normalTemperatureDay, 10, 110);
+    //showing normal temperature of night if planet has a day and night
     text("normal temperature of night: " + clickedPlanet?.normalTemperatureNight, 10, 130);
-    text("distance to sun: " + clickedPlanet?.distanceToSun + " AU", 10, 210);
+    //showing distance to sun with Atronomical unit when 1 AU is the distance from Earth to sun
+   text("distance to sun: " + clickedPlanet?.distanceToSun + " AU", 10, 210);
 
-  }
+  }//end of if clicked (planet details)
   
-  }
+}
 
-function drawPlanet(planetName, distanceToSun, transform, planetSize, colour, yearDuration, initialAngle){
+//called to draw each planet
+function drawPlanet(
+  planetName,
+  distanceToSun,
+  transform,
+  planetSize,
+  colour, 
+  yearDuration,
+  initialAngle
+){
   //calculate orbit size
   const orbitSize = 50 * transform * distanceToSun/3;
-  
   //orbit
-  stroke("grey");
+  //color of orbit
+  stroke("black");
+  //thickness of orbit
   strokeWeight(1);
+  //transparent
   noFill();
+  //how big circle is
   circle(width/2, height/2, orbitSize);
 
   //planet
+  //how many frames are in one year there -->
   const framesInOneYear = 
+  //frame rate of the app
         appFrameRate * 
+  //how many seconds are in a day
         secondsInDay *
         yearDuration;
   let angle = (initialAngle + ((
@@ -264,6 +315,7 @@ function drawPlanet(planetName, distanceToSun, transform, planetSize, colour, ye
   let y = height/2 - sin(angle)*orbitSize/2;
   circle(x, y, planetSize);
 
+  //determining if planet was clicked
   if(
     clickedX > (x-planetSize/2) && 
     clickedX < (x+planetSize/2) &&
@@ -275,6 +327,7 @@ function drawPlanet(planetName, distanceToSun, transform, planetSize, colour, ye
   
 }
 
+//determining if button was clicked
 function mouseClicked(){
   if(
     mouseX > 895 &&
@@ -299,7 +352,17 @@ function mouseClicked(){
     return;
   }
   
-  clicked = !clicked;
+  if(
+  mouseX > 240 &&
+  mouseX < 250 &&
+  mouseY > 20 &&
+  mouseY < 30
+  ){
+    clicked = false;
+    return;
+  }
+
+  clicked = true;
   clickedX = mouseX;
   clickedY = mouseY;
 }
