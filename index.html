@@ -176,7 +176,7 @@ function setup() {
 //function called for every animation frame (30 fps)
 function draw(){
   //color of backgroung
-  background("gray");
+  background(0);
 
   //accumulate frames according to set speed
   elapsedFrames += speedOptions[speedIndex];
@@ -289,7 +289,7 @@ function drawPlanet(
   const orbitSize = 50 * transform * distanceToSun/3;
   //orbit
   //color of orbit
-  stroke("black");
+  stroke("grey");
   //thickness of orbit
   strokeWeight(1);
   //transparent
@@ -361,7 +361,9 @@ function mouseClicked(){
     clicked = false;
     return;
   }
-
+    
+  
+  
   clicked = true;
   clickedX = mouseX;
   clickedY = mouseY;
